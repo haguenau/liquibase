@@ -1,4 +1,4 @@
-package liquibase.database.core.supplier;
+package liquibase.database.core;
 
 import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
