@@ -2,6 +2,7 @@ package liquibase.snapshot.jvm;
 
 import liquibase.database.Database;
 import liquibase.database.core.*;
+import liquibase.database.core.supplier.VerticaDatabase;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.UnexpectedLiquibaseException;
 import liquibase.executor.ExecutorService;
@@ -135,6 +136,8 @@ public class SequenceSnapshotGenerator extends JdbcSnapshotGenerator {
             return "SELECT tabname AS SEQUENCE_NAME FROM systables t, syssequences s WHERE s.tabid = t.tabid AND t.owner = '" + schema.getName() + "'";
         } else if (database instanceof OracleDatabase) {
             return "SELECT SEQUENCE_NAME AS SEQUENCE_NAME, MIN_VALUE, MAX_VALUE, INCREMENT_BY, CYCLE_FLAG AS WILL_CYCLE, ORDER_FLAG AS IS_ORDERED, LAST_NUMBER as START_VALUE, CACHE_SIZE FROM ALL_SEQUENCES WHERE SEQUENCE_OWNER = '" + schema.getCatalogName() + "'";
+        } else if (database instanceof VerticaDatabase) {
+          throw new UnexpectedLiquibaseException("(TODO) Don't know how to query for sequences on " + database);
         } else if (database instanceof PostgresDatabase) {
             return "SELECT relname AS SEQUENCE_NAME FROM pg_class, pg_namespace " +
                     "WHERE relkind='S' " +
